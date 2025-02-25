@@ -10,19 +10,12 @@ describe("Orange HRM Tests", () => {
     wrongCredential: "[role='alert']",
   };
 
-  it("lOGIN - Sucess", () => {
+  it.only("User Info Update - Sucess", () => {
     cy.visit("auth/login");
     cy.get(selectorsList.usernameField).type(userData.userSuccess.username);
     cy.get(selectorsList.passwordField).type(userData.userSuccess.password);
     cy.get(selectorsList.loginButton).click();
     cy.location("pathname").should("equal", "/web/index.php/dashboard/index");
     cy.get(selectorsList.dashboardGrid);
-  });
-  it("lOGIN - Fail", () => {
-    cy.visit("auth/login");
-    cy.get(selectorsList.usernameField).type(userData.userFail.username);
-    cy.get(selectorsList.passwordField).type(userData.userFail.password);
-    cy.get(selectorsList.loginButton).click();
-    cy.get(selectorsList.wrongCredential);
   });
 });
