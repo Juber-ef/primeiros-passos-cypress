@@ -8,6 +8,7 @@ describe("Orange HRM Tests", () => {
     sectionTitleTopBar: ".oxd-topbar-header-breadcrumb-module",
     dashboardGrid: ".orangehrm-dashboard-grid",
     wrongCredential: "[role='alert']",
+    myInfoButon: "[href='/web/index.php/pim/viewMyDetails']",
   };
 
   it.only("User Info Update - Sucess", () => {
@@ -17,5 +18,6 @@ describe("Orange HRM Tests", () => {
     cy.get(selectorsList.loginButton).click();
     cy.location("pathname").should("equal", "/web/index.php/dashboard/index");
     cy.get(selectorsList.dashboardGrid);
+    cy.get(selectorsList.myInfoButon).click;
   });
 });
