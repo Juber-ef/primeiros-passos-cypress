@@ -15,6 +15,9 @@ describe("Orange HRM Tests", () => {
     dateFiel: "[placeholder='yyyy-dd-mm']",
     dateCloseButton: ".--close",
     sumitButton: "[type='submit']",
+    generiCombobox: ".oxd-select-text--arrow",
+    nationality: ".oxd-select-dropdown > :nth-child(2)",
+    marital: ".oxd-select-dropdown > :nth-child(3)",
   };
 
   it.only("User Info Update - Sucess", () => {
@@ -33,6 +36,10 @@ describe("Orange HRM Tests", () => {
     cy.get(selectorsList.genericField).eq(6).clear().type("1988-02-01");
     cy.get(selectorsList.dateCloseButton).click();
     cy.get(selectorsList.sumitButton).eq(0).click();
+    cy.get(selectorsList.generiCombobox).eq(0).click({ force: true });
+    cy.get(selectorsList.nationality).click();
+    cy.get(selectorsList.generiCombobox).eq(1).click({ force: true });
+    cy.get(selectorsList.marital).click();
     cy.get("body").should("contain", "Successfully Updated");
     cy.get(".oxd-toast-close");
   });
