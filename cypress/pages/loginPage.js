@@ -6,10 +6,13 @@ class loginPage {
       loginButton: "[type='submit']",
       wrongCredential: "['role='alert']",
     };
+    return selectors;
   }
 
   accessLoginPage() {
-    cy.visit("auth/login");
+    cy.visit(
+      "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+    );
   }
 
   loginWithUser(username, password) {

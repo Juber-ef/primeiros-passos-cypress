@@ -1,46 +1,36 @@
 import userData from "../fixtures/user-data.json";
+import loginPage from "../pages/loginPage.js";
+import dashboardPage from "../pages/dashboardPage.js";
+import MyInfoPage from "../pages/myInfoPage.js";
+import MenuPage from "../pages/menuPage.js";
+
+const LoginPage = new loginPage();
+const DashboardPage = new dashboardPage();
+const menuPage = new MenuPage();
+const myInfoPage = new MyInfoPage();
 
 describe("Orange HRM Tests", () => {
-  const selectorsList = {
-    usernameField: "[name= 'username']",
-    passwordField: "[name='password']",
-    loginButton: "[type='submit']",
-    sectionTitleTopBar: ".oxd-topbar-header-breadcrumb-module",
-    dashboardGrid: ".orangehrm-dashboard-grid",
-    wrongCredential: "['role='alert']",
-    myInfoButon: "[href='/web/index.php/pim/viewMyDetails']",
-    firstNameField: "[name='firstName']",
-    lastNameField: "[name='lastName']",
-    genericField: ".oxd-input--active",
-    dateFiel: "[placeholder='yyyy-dd-mm']",
-    dateCloseButton: ".--close",
-    sumitButton: "[type='submit']",
-    generiCombobox: ".oxd-select-text--arrow",
-    nationality: ".oxd-select-dropdown > :nth-child(2)",
-    marital: ".oxd-select-dropdown > :nth-child(3)",
-  };
-
   it.only("User Info Update - Sucess", () => {
-    cy.visit("auth/login");
-    cy.get(selectorsList.usernameField).type(userData.userSuccess.username);
-    cy.get(selectorsList.passwordField).type(userData.userSuccess.password);
+    loginPage.accessLoginPage();
+    loginPage.loginWithUser(
+      userData.userSuccess.username,
+      userData.userSuccess.password
+    );
+    dashboardPage.checkDashboardPage();
+
+    MenuPage.accessMyinfo();
+
+    MyInfoPage.fillPersonalDetails("First Name", "Last Name", "nickName");
+    MyInfoPage.fillEmployDetails("EmployId", "otherId", "2025-07-29");
+    MyInfoPage.fillStatus();
+    MyInfoPage.saveForm();
+  });
+
+  it("Login - Fail", () => {
+    cy.visit("/auth/login");
+    cy.get(selectorsList.usernameField).type(userData.userFail.username);
+    cy.get(selectorsList.passwordField).type(userData.userFail.password);
     cy.get(selectorsList.loginButton).click();
-    cy.location("pathname").should("equal", "/web/index.php/dashboard/index");
-    cy.get(selectorsList.dashboardGrid);
-    cy.get(selectorsList.myInfoButon).click();
-    cy.get(selectorsList.firstNameField).clear().type("Test");
-    cy.get(selectorsList.lastNameField).clear().type("LastNameTest");
-    cy.get(selectorsList.genericField).eq(3).clear().type("E");
-    cy.get(selectorsList.genericField).eq(4).clear().type("OtherIdTeste");
-    cy.get(selectorsList.genericField).eq(5).clear().type("DriverLicenseTest");
-    cy.get(selectorsList.genericField).eq(6).clear().type("1988-02-01");
-    cy.get(selectorsList.dateCloseButton).click();
-    cy.get(selectorsList.sumitButton).eq(0).click();
-    cy.get(selectorsList.generiCombobox).eq(0).click({ force: true });
-    cy.get(selectorsList.nationality).click();
-    cy.get(selectorsList.generiCombobox).eq(1).click({ force: true });
-    cy.get(selectorsList.marital).click();
-    cy.get("body").should("contain", "Successfully Updated");
-    cy.get(".oxd-toast-close");
+    cy.get(selectorsList.wrongCredentialAlert);
   });
 });
